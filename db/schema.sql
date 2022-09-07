@@ -4,7 +4,7 @@ CREATE DATABASE employees_db;
 USE employees_db;
 
 CREATE TABLE department (
-    id INT PRIMARY KEY NOT NULL,
+    id INT NOT NULL PRIMARY KEY,
     dept_name VARCHAR(30) NOT NULL
 );
 
@@ -22,3 +22,7 @@ CREATE TABLE employee (
     role_id INT NOT NULL, -- reference to role
     manager_id INT -- reference to another employee, null if none
 );
+
+-- FOREIGN KEY (which item in *this* table is the foreign key)
+-- REFERENCES (where is it coming from in another table)
+-- ON DELETE (set null or cascade)
