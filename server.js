@@ -1,6 +1,6 @@
 const express = require("express");
 const mysql = require("mysql2");
-const consoleTable = require("console.table");
+const consoleTable = require("console.table"); // ??
 const inquirer = require("inquirer");
 
 const PORT = process.env.PORT || 3001;
@@ -13,12 +13,13 @@ const db = mysql.createConnection(
   {
     host: "localhost",
     user: "root",
-    password: "dE4!62f@", // TODO: PASSWORD HERE
+    password: "", // TODO: PASSWORD HERE
     database: "employees_db",
   },
   console.log("Connected to the employees_db database.")
 );
 
+// TODO: return to main menu after completing an option
 initMainMenu();
 async function initMainMenu() {
   const mainResponse = await inquirer.prompt([
@@ -40,7 +41,6 @@ async function initMainMenu() {
   switch (mainResponse.mainMenu) {
     case "View All Departments":
       // THEN I am presented with a formatted table showing department names and department ids
-      // TODO: rewrite query with joins
       db.query("SELECT * FROM department", function (err, results) {
         if (err) {
           console.log(err);
