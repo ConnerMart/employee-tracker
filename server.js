@@ -19,7 +19,6 @@ const db = mysql.createConnection(
   console.log("Connected to the employees_db database.")
 );
 
-// TODO: return to main menu after completing an option
 initMainMenu();
 async function initMainMenu() {
   const mainResponse = await inquirer.prompt([
@@ -34,6 +33,7 @@ async function initMainMenu() {
         "Add a Role",
         "Add an Employee",
         "Update an Employee Role",
+        "Quit",
       ],
       name: "mainMenu",
     },
@@ -44,30 +44,38 @@ async function initMainMenu() {
       db.query("SELECT * FROM department", function (err, results) {
         if (err) {
           console.log(err);
+          initMainMenu();
         } else {
           console.table(results);
+          initMainMenu();
         }
       });
       break;
     case "View All Roles":
       // THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
-      // TODO: rewrite query with joins
-      db.query("SELECT * FROM role", function (err, results) {
+      const roleQuery =
+        "SELECT role.title AS job_title, role.id AS role_id, department.dept_name, role.salary FROM role JOIN department ON department.id = role.department_id;";
+      db.query(roleQuery, function (err, results) {
         if (err) {
           console.log(err);
+          initMainMenu();
         } else {
           console.table(results);
+          initMainMenu();
         }
       });
       break;
     case "View All Employees":
       // THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
-      // TODO: rewrite query with joins
-      db.query("SELECT * FROM employee", function (err, results) {
+      const employeeQuery =
+        "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.dept_name AS dept_name, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id;";
+      db.query(employeeQuery, function (err, results) {
         if (err) {
           console.log(err);
+          initMainMenu();
         } else {
           console.table(results);
+          initMainMenu();
         }
       });
       break;
@@ -83,6 +91,9 @@ async function initMainMenu() {
     case "Update an Employee Role":
       // TODO: THEN I am prompted to select an employee to update and their new role and this information is updated in the database
       break;
+    case "Quit":
+      console.log("Ending application");
+      return;
   }
 }
 
@@ -110,7 +121,7 @@ async function addRole() {
       name: "roleSalary",
     },
     {
-      type: "input", // TODO: change to list choice?
+      type: "input", // TODO: change to list choice of depts in db
       message: "Enter the role's department.",
       name: "roleDept",
     },
@@ -131,35 +142,18 @@ async function addEmployee() {
       name: "employeeLast",
     },
     {
-      type: "input", // TODO: change to list choice?
+      type: "input", // TODO: change to list choice of roles in db
       message: "Enter employee's role",
       name: "employeeRole",
     },
     {
-      type: "input", // TODO: change to list choice?
+      type: "input", // TODO: change to list choice of employees in db
       message: "Enter employee's manager",
       name: "employeeManager",
     },
   ]);
   // TODO: THEN that employee is added to the database
 }
-
-// // shows department table in terminal
-// db.query("SELECT * FROM department", function (err, results) {
-//   console.log(results);
-// });
-// // shows role table in terminal
-// db.query("SELECT * FROM role", function (err, results) {
-//   console.log(results);
-// });
-// // shows employee table in terminal
-// db.query("SELECT * FROM employee", function (err, results) {
-//   console.log(results);
-// });
-// // default "not found" response if nothing else works
-// app.use((req, res) => {
-//   res.status(404).end();
-// });
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}...`);

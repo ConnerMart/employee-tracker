@@ -4,12 +4,12 @@ CREATE DATABASE employees_db;
 USE employees_db;
 
 CREATE TABLE department (
-    id INT NOT NULL PRIMARY KEY,
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     dept_name VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE role (
-    id INT NOT NULL PRIMARY KEY,
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(30) NOT NULL,
     salary DECIMAL(5, 3) NOT NULL,
     department_id INT,
@@ -19,7 +19,7 @@ CREATE TABLE role (
 );
 
 CREATE TABLE employee (
-    id INT NOT NULL PRIMARY KEY,
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR (30) NOT NULL,
     role_id INT, 
@@ -34,4 +34,4 @@ CREATE TABLE employee (
 
 -- FOREIGN KEY (which item in *this* table is the foreign key)
 -- REFERENCES (where is it coming from in another table)
--- ON DELETE (set null or cascade)
+-- ON DELETE (SET NULL or CASCADE)
