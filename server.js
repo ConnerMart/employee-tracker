@@ -93,11 +93,12 @@ async function initMainMenu() {
       break;
     case "Quit":
       console.log("Ending application");
-      return;
+      process.exit();
   }
 }
 
 async function addDept() {
+  // THEN that department is added to the database
   const deptResponse = await inquirer.prompt([
     {
       type: "input",
@@ -105,10 +106,19 @@ async function addDept() {
       name: "addDept",
     },
   ]);
-  // TODO: THEN that department is added to the database
+  const deptQuery = `INSERT INTO department (dept_name) VALUES ("${deptResponse.addDept}");`;
+  db.query(deptQuery, function (err, results) {
+    if (err) {
+      console.log(err);
+      initMainMenu();
+    } else {
+      initMainMenu();
+    }
+  });
 }
 
 async function addRole() {
+  // THEN that role is added to the database
   const roleResponse = await inquirer.prompt([
     {
       type: "input",
@@ -126,10 +136,20 @@ async function addRole() {
       name: "roleDept",
     },
   ]);
-  // TODO: THEN that role is added to the database
+  // TODO: add department value
+  const roleQuery = `INSERT INTO role (title, salary) VALUES ("${roleResponse.roleName}", "${roleResponse.roleSalary}");`;
+  db.query(roleQuery, function (err, results) {
+    if (err) {
+      console.log(err);
+      initMainMenu();
+    } else {
+      initMainMenu();
+    }
+  });
 }
 
 async function addEmployee() {
+  // THEN that employee is added to the database
   const employeeResponse = await inquirer.prompt([
     {
       type: "input",
@@ -152,7 +172,16 @@ async function addEmployee() {
       name: "employeeManager",
     },
   ]);
-  // TODO: THEN that employee is added to the database
+  // TODO: add role, manager values
+  const employeeQuery = `INSERT INTO employee (first_name, last_name) VALUES ("${employeeResponse.employeeFirst}", "${employeeResponse.employeeLast}");`;
+  db.query(employeeQuery, function (err, results) {
+    if (err) {
+      console.log(err);
+      initMainMenu();
+    } else {
+      initMainMenu();
+    }
+  });
 }
 
 app.listen(PORT, () => {

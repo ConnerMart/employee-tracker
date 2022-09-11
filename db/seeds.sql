@@ -6,12 +6,12 @@ VALUES
 
 INSERT INTO role (title, salary, department_id)
 VALUES
-("Regional Manager", 75.000, 1),
-("Salesperson", 50.000, 1),
-("Junior Salesperson", 40.000, 1),
-("Accountant", 35.000, 2),
-("HR Rep", 45.000, 3),
-("Customer Service Rep", 40.000, 3);
+("Regional Manager", 75000, 1),
+("Salesperson", 50000, 1),
+("Junior Salesperson", 40000, 1),
+("Accountant", 35000, 2),
+("HR Rep", 45000, 3),
+("Customer Service Rep", 40000, 3);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
