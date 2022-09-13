@@ -1,6 +1,6 @@
 const express = require("express");
 const mysql = require("mysql2");
-const consoleTable = require("console.table"); // ??
+const consoleTable = require("console.table");
 const inquirer = require("inquirer");
 
 const PORT = process.env.PORT || 3001;
@@ -32,7 +32,7 @@ async function initMainMenu() {
         "Add a Department",
         "Add a Role",
         "Add an Employee",
-        "Update an Employee Role",
+        "Update an Employee's Role",
         "Quit",
       ],
       name: "mainMenu",
@@ -88,8 +88,8 @@ async function initMainMenu() {
     case "Add an Employee":
       addEmployee();
       break;
-    case "Update an Employee Role":
-      // TODO: THEN I am prompted to select an employee to update and their new role and this information is updated in the database
+    case "Update an Employee's Role":
+      updateEmployee();
       break;
     case "Quit":
       console.log("Ending application");
@@ -175,6 +175,49 @@ async function addEmployee() {
   // TODO: add role, manager values
   const employeeQuery = `INSERT INTO employee (first_name, last_name) VALUES ("${employeeResponse.employeeFirst}", "${employeeResponse.employeeLast}");`;
   db.query(employeeQuery, function (err, results) {
+    if (err) {
+      console.log(err);
+      initMainMenu();
+    } else {
+      initMainMenu();
+    }
+  });
+}
+
+async function updateEmployee() {
+  // TODO: THEN I am prompted to select an employee to update and their new role and this information is updated in the database
+
+  // const employeeList = db.query(
+  //   `SELECT first_name, last_name from employee;`,
+  //   function (err, results) {
+  //     let employeeArray = [];
+  //     if (err) {
+  //       console.log(err);
+  //       initMainMenu();
+  //     } else {
+  //       for (result of results) {
+  //         employeeArray.push(`${result.first_name} ${result.last_name}`);
+  //       }
+  //       return employeeArray;
+  //     }
+  //   }
+  // );
+  // console.log(employeeList);
+
+  const updateResponse = await inquirer.prompt([
+    {
+      type: "input",
+      message: "Enter the first name of the employee to update.",
+      name: "employeeSelect",
+    },
+    {
+      type: "input",
+      message: "Enter the employee's new role.",
+      name: "roleSelect",
+    },
+  ]);
+  const updateQuery = `UPDATE employee SET role = "${updateResponse.roleSelect}" where employee.first_name = "${updateResponse.employeeSelect}"`;
+  db.query(updateQuery, function (err, results) {
     if (err) {
       console.log(err);
       initMainMenu();
