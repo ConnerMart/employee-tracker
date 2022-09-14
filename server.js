@@ -187,22 +187,22 @@ async function addEmployee() {
 async function updateEmployee() {
   // TODO: THEN I am prompted to select an employee to update and their new role and this information is updated in the database
 
-  // const employeeList = db.query(
-  //   `SELECT first_name, last_name from employee;`,
-  //   function (err, results) {
-  //     let employeeArray = [];
-  //     if (err) {
-  //       console.log(err);
-  //       initMainMenu();
-  //     } else {
-  //       for (result of results) {
-  //         employeeArray.push(`${result.first_name} ${result.last_name}`);
-  //       }
-  //       return employeeArray;
-  //     }
-  //   }
-  // );
-  // console.log(employeeList);
+  const employeeList = db.query(
+    `SELECT first_name, last_name from employee;`,
+    function (err, results) {
+      let employeeArray = [];
+      if (err) {
+        console.log(err);
+        initMainMenu();
+      } else {
+        for (result of results) {
+          employeeArray.push(`${result.first_name} ${result.last_name}`);
+        }
+        return employeeArray;
+      }
+    }
+  );
+  console.log({ employeeList });
 
   const updateResponse = await inquirer.prompt([
     {
