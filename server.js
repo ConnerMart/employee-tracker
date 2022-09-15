@@ -186,10 +186,9 @@ async function addEmployee() {
 
 async function updateEmployee() {
   // TODO: THEN I am prompted to select an employee to update and their new role and this information is updated in the database
-
-  const employeeList = db.query(
-    `SELECT first_name, last_name from employee;`,
-    function (err, results) {
+  db.query(
+    `SELECT id, first_name, last_name from employee;`,
+    async function (err, results) {
       let employeeArray = [];
       if (err) {
         console.log(err);
@@ -198,33 +197,31 @@ async function updateEmployee() {
         for (result of results) {
           employeeArray.push(`${result.first_name} ${result.last_name}`);
         }
-        return employeeArray;
+        const updateResponse = await inquirer.prompt([
+          {
+            type: "list",
+            message: "Select the employee to update.",
+            choices: employeeArray,
+            name: "employeeSelect",
+          },
+          {
+            type: "input",
+            message: "Select the employee's new role.",
+            name: "roleSelect",
+          },
+        ]);
+        const updateQuery = `UPDATE employee SET role_id = "${updateResponse.roleSelect}" where employee.id = "${result.id}"`;
+        db.query(updateQuery, function (err, results) {
+          if (err) {
+            console.log(err);
+            initMainMenu();
+          } else {
+            initMainMenu();
+          }
+        });
       }
     }
   );
-  console.log({ employeeList });
-
-  const updateResponse = await inquirer.prompt([
-    {
-      type: "input",
-      message: "Enter the first name of the employee to update.",
-      name: "employeeSelect",
-    },
-    {
-      type: "input",
-      message: "Enter the employee's new role.",
-      name: "roleSelect",
-    },
-  ]);
-  const updateQuery = `UPDATE employee SET role = "${updateResponse.roleSelect}" where employee.first_name = "${updateResponse.employeeSelect}"`;
-  db.query(updateQuery, function (err, results) {
-    if (err) {
-      console.log(err);
-      initMainMenu();
-    } else {
-      initMainMenu();
-    }
-  });
 }
 
 app.listen(PORT, () => {
